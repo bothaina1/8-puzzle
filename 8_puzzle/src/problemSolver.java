@@ -6,12 +6,25 @@ public class problemSolver {
 
 
     public void BFS(Board initialState){
+        if(initialState.isSolvable()){
+            System.out.println("the 8  puzzle is unsolvable");
+            return;
+        }
     }
 
     public void DFS(Board initialState){
+        if(initialState.isSolvable()){
+            System.out.println("the 8  puzzle is unsolvable");
+            return;
+        }
+
     }
 
     public void A_Star_Search(Board initialState) {
+        if(initialState.isSolvable()){
+            System.out.println("the 8  puzzle is unsolvable");
+            return;
+        }
         Stack<Board> solution=new Stack<>();
         PriorityQueue<Board> frontier = new PriorityQueue<Board>();
         // LinkedList<Board> explored= new LinkedList<>();
@@ -29,6 +42,7 @@ public class problemSolver {
             for (Board child : state.getChildren()) {
                 if (!child.equals(previous)) {
                     frontier.add(child);
+                    child.arrToString();
                 }
             }
         }
