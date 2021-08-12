@@ -7,10 +7,28 @@ public class Board implements Comparable<Board>{
     private int priority;
     private int moves;
     private int[][] grid;
+    private String gridString;
     private Board parent;
     private int zeroRow=-1;
     private int zeroCol=-1;
     private Collection<Board> neighbours;
+
+    public  Board(String s) {
+        int[][] arr = new int[3][3];
+        int x = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                arr[i][j] = Integer.parseInt(String.valueOf(s.charAt(x)));
+                x += 2;
+            }
+
+        }
+        this.gridString=s;
+        this.grid=arr;
+        this.moves=0;
+        this.setPriority();
+        this.parent=null;
+    }
 
     public Board(int[][] grid,int moves,Board parent) {
        this.grid=grid;
@@ -101,7 +119,7 @@ public class Board implements Comparable<Board>{
         array[toRow][toCol] = i;
     }
 
-    public  boolean equals(Board other){
+    public  boolean equalgrid(Board other){
         if(other==null) return false;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -168,15 +186,17 @@ public class Board implements Comparable<Board>{
     }
 
 
-    private int getInvCount(int[][] arr)
-    {
+    private int getInvCount(String s) {
         int inv_count = 0;
-        for (int i = 0; i < 3 - 1; i++)
-            for (int j = i + 1; j < 3; j++)
-
-                // Value 0 is used for empty space
-                if (arr[j][i] > 0 && arr[i][j]>0  && arr[j][i] > arr[i][j])
+        for (int i = 0; i < s.length(); i = i + 2){
+            for (int j = i + 2; j < s.length(); j = j + 2) {
+                int num1=Integer.parseInt(String.valueOf(s.charAt(i)));
+                int num2=Integer.parseInt(String.valueOf(s.charAt(j)));
+                if (num1>0 && num2>0 && num1> num2)
                     inv_count++;
+            }
+    }
+
         return inv_count;
     }
 
@@ -185,28 +205,23 @@ public class Board implements Comparable<Board>{
     public boolean isSolvable()
     {
         // Count inversions in given 8 puzzle
-        int invCount = getInvCount(this.grid);
+        int invCount = getInvCount(this.gridString);
 
         // return true if inversion count is even.
         return (invCount % 2 == 0);
     }
 
-
-
-
-
-
-
-
-
-
-    public static void main(String args[]) {
-        Integer x = new Integer(3);
-        String retval = x.toString(8, 3);
-        x = Integer.parseInt(retval);
-        int y =x%10; x=x/10;
-        double d= Math.sqrt(  Math.pow((x-1),2) + Math.pow((y-0),2) );
-        System.out.println(d);
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+            return false;
+        if (obj == this)
+            return true;
+        return this.equalgrid((Board) obj);
+    }
+    public int getMoves(){
+        return this.moves;
     }
 
 }
